@@ -26,7 +26,7 @@
 
         public Car(int year, string model, double price, bool isDrivable = true)
         {
-            this.year = year;
+            this.year= year;
             _model = model;
             _price = price;
             _isDrivable = isDrivable;
