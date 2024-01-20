@@ -19,7 +19,7 @@
 
     public class Car
     {
-        private readonly int year;
+        private int year;
         private readonly string _model;
         private readonly double _price;
         private readonly bool _isDrivable;
