@@ -1,0 +1,2 @@
+docker pull github/super-linter:latest
+docker run -e RUN_LOCAL=true -v "$(pwd)":/tmp/lint github/super-linter
