@@ -1,5 +1,9 @@
 # Creating a Date class
 
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/ttran375/comp123-lab3)
+
+[![Lint](https://github.com/ttran375/comp123-lab3/actions/workflows/main.yml/badge.svg)](https://github.com/ttran375/comp123-lab3/actions/workflows/main.yml)
+
 We will assume that there are 12 months in a year and each month is 30
 days long. In this course, sometimes it is more practical to ignore
 certain details, that would otherwise overly complicate your model.
