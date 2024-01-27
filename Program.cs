@@ -57,7 +57,6 @@
             }
         }
 
-
         public override string ToString()
         {
             string monthText = GetMonthText(_month);
@@ -83,6 +82,7 @@
                 _ => "Unknown",
             };
         }
+
         private static int GetDaysInMonth(int year, int month)
         {
             return month switch
@@ -99,5 +99,4 @@
             return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
         }
     }
-
 }
