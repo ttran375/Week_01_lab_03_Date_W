@@ -57,6 +57,21 @@
             }
         }
 
+        private static int GetDaysInMonth(int year, int month)
+        {
+            return month switch
+            {
+                2 => IsLeapYear(year) ? 29 : 28,
+                4 or 6 or 9 or 11 => 30,
+                _ => 31
+            };
+        }
+
+        private static bool IsLeapYear(int year)
+        {
+            return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+        }
+
         public override string ToString()
         {
             string monthText = GetMonthText(_month);
@@ -81,21 +96,6 @@
                 12 => "Dec",
                 _ => "Unknown",
             };
-        }
-
-        private static int GetDaysInMonth(int year, int month)
-        {
-            return month switch
-            {
-                2 => IsLeapYear(year) ? 29 : 28,
-                4 or 6 or 9 or 11 => 30,
-                _ => 31
-            };
-        }
-
-        private static bool IsLeapYear(int year)
-        {
-            return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
         }
     }
 }
