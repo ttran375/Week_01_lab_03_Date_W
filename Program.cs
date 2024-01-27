@@ -1,202 +1,103 @@
-﻿using System;
-
-public class Date
+﻿namespace Week_01_lab_03_Date_W
 {
-    // Fields
-    private int year;
-    private int month;
-    private int day;
-
-    // Property for Julian day
-    public int JulianDay
+    internal class Program
     {
-        get { return CalculateJulianDay(); }
-        private set { SetDateFromJulianDay(value); }
-    }
-
-    // Constructor
-    public Date(int day = 1, int month = 1, int year = 2022)
-    {
-        this.day = day;
-        this.month = month;
-        this.year = year;
-        Normalize();
-    }
-
-    // Methods
-    public override string ToString()
-    {
-        string monthName = GetMonthName(month);
-        return $"{day} {monthName} {year}";
-    }
-
-    public void Add(int days)
-    {
-        JulianDay += days;
-        Normalize();
-    }
-
-    public void Add(int months, int days)
-    {
-        // Adjust Julian day directly
-        JulianDay += days + CalculateDaysInMonths(months);
-        Normalize();
-    }
-
-    public void Add(Date other)
-    {
-        // Add Julian days directly
-        JulianDay += other.JulianDay;
-        Normalize();
-    }
-
-    // Private method to normalize the date
-    private void Normalize()
-    {
-        // Extract year, month, and day from Julian day
-        int totalDays = JulianDay;
-        year = 2022;
-
-        while (totalDays > 365 + (IsLeapYear(year) ? 1 : 0))
+        static void Main(string[] args)
         {
-            totalDays -= 365 + (IsLeapYear(year) ? 1 : 0);
-            year++;
+            Date date = new(1, 1, 2024);
+            Console.WriteLine(date.ToString());
+
+            date.Add(10);
+            Console.WriteLine(date.ToString());
+
+            date.Add(100);
+            Console.WriteLine(date.ToString());
+
+            date.Add(1000);
+            Console.WriteLine(date.ToString());
+        }
+    }
+
+
+    public class Date
+    {
+        private int _year;
+        private int _month;
+        private int _day;
+
+        public Date(int day = 1, int month = 1, int year = 2022)
+        {
+            _day = day;
+            _month = month;
+            _year = year;
+            Normalize();
         }
 
-        month = 1;
-        while (totalDays > GetMonthLength(month, year))
+        public void Add(int days)
         {
-            totalDays -= GetMonthLength(month, year);
-            month++;
+            _day += days;
+            Normalize();
         }
 
-        day = totalDays;
-    }
-
-    // Private method to calculate Julian day
-    private int CalculateJulianDay()
-    {
-        int totalDays = day;
-
-        for (int i = 1; i < month; i++)
+        private void Normalize()
         {
-            totalDays += GetMonthLength(i, year);
-        }
-
-        for (int i = 2022; i < year; i++)
-        {
-            totalDays += 365 + (IsLeapYear(i) ? 1 : 0);
-        }
-
-        return totalDays;
-    }
-
-    // Private method to set date from Julian day
-    private void SetDateFromJulianDay(int julianDay)
-    {
-        int totalDays = julianDay;
-        year = 2022;
-
-        while (totalDays > 365 + (IsLeapYear(year) ? 1 : 0))
-        {
-            totalDays -= 365 + (IsLeapYear(year) ? 1 : 0);
-            year++;
-        }
-
-        month = 1;
-        while (totalDays > GetMonthLength(month, year))
-        {
-            totalDays -= GetMonthLength(month, year);
-            month++;
-        }
-
-        day = totalDays;
-    }
-
-    // Private method to calculate days in months
-    private int CalculateDaysInMonths(int months)
-    {
-        int totalDays = 0;
-        int currentMonth = month;
-        int currentYear = year;
-
-        for (int i = 0; i < months; i++)
-        {
-            totalDays += GetMonthLength(currentMonth, currentYear);
-            currentMonth++;
-
-            if (currentMonth > 12)
+            int daysInMonth = GetDaysInMonth(_year, _month);
+            while (_day > daysInMonth)
             {
-                currentMonth = 1;
-                currentYear++;
+                _day -= daysInMonth;
+                _month++;
+
+                if (_month > 12)
+                {
+                    _month -= 12;
+                    _year++;
+                }
+
+                daysInMonth = GetDaysInMonth(_year, _month);
             }
         }
 
-        return totalDays;
-    }
 
-    // Private method to get the month name
-    private string GetMonthName(int month)
-    {
-        switch (month)
+        public override string ToString()
         {
-            case 1: return "Jan";
-            case 2: return "Feb";
-            case 3: return "Mar";
-            case 4: return "Apr";
-            case 5: return "May";
-            case 6: return "Jun";
-            case 7: return "Jul";
-            case 8: return "Aug";
-            case 9: return "Sep";
-            case 10: return "Oct";
-            case 11: return "Nov";
-            case 12: return "Dec";
-            default: return "Invalid Month";
+            string monthText = GetMonthText(_month);
+            return $"{_year}-{monthText}-{_day}";
+        }
+
+        public static string GetMonthText(int month)
+        {
+            return month switch
+            {
+                1 => "Jan",
+                2 => "Feb",
+                3 => "Mar",
+                4 => "Apr",
+                5 => "May",
+                6 => "Jun",
+                7 => "Jul",
+                8 => "Aug",
+                9 => "Sep",
+                10 => "Oct",
+                11 => "Nov",
+                12 => "Dec",
+                _ => "Unknown",
+            };
+        }
+        private static int GetDaysInMonth(int year, int month)
+        {
+            return month switch
+            {
+                2 => IsLeapYear(year) ? 29 : 28,
+                4 or 6 or 9 or 11 => 30,
+                1 or 3 or 5 or 7 or 8 or 10 or 12 => 31,
+                _ => throw new NotImplementedException(),
+            };
+        }
+
+        private static bool IsLeapYear(int year)
+        {
+            return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
         }
     }
 
-    // Private method to get the length of a month
-    private int GetMonthLength(int month, int year)
-    {
-        if (month == 2)
-        {
-            // Check for leap year
-            return IsLeapYear(year) ? 29 : 28;
-        }
-        else if (month == 4 || month == 6 || month == 9 || month == 11)
-        {
-            return 30;
-        }
-        else
-        {
-            return 31;
-        }
-    }
-
-    // Private method to check for leap year
-    private bool IsLeapYear(int year)
-    {
-        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
-    }
-}
-
-class Program
-{
-    static void Main()
-    {
-        // Example usage
-        Date date = new Date(1, 1, 2024);
-        Console.WriteLine(date.ToString());
-
-        date.Add(31);
-        Console.WriteLine(date.ToString());
-
-        date.Add(0, 29);
-        Console.WriteLine(date.ToString());
-
-        Date otherDate = new Date(1, 1, 1);
-        date.Add(otherDate);
-        Console.WriteLine(date.ToString());
-    }
 }
